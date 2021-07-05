@@ -5,7 +5,8 @@ export class Todo {
   tasks: Task[] = [];
   elements: TodoElements;
   alert: NodeJS.Timeout | undefined;
-  baseUrl = 'https://todo-api.next-comfort.com/tasks';
+  baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+  authorization = `Bearer ${process.env.TOKEN}`;
   sending = false;
 
   constructor(component: HTMLElement) {
@@ -44,7 +45,11 @@ export class Todo {
     const messageElement = this.elements.message;
     messageElement.textContent = '受信中……';
     try {
-      const response = await fetch(this.baseUrl);
+      const response = await fetch(this.baseUrl, {
+        headers: {
+          Authorization: this.authorization,
+        },
+      });
       if (!response.ok) throw new Error(`${response.status} (${response.statusText})`);
       const data: TaskData[] = await response.json();
       messageElement.style.opacity = '0';
@@ -83,6 +88,7 @@ export class Todo {
       const response = await fetch(this.baseUrl, {
         method: 'POST',
         headers: {
+          Authorization: this.authorization,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ body }),

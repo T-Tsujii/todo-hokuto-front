@@ -36,6 +36,7 @@ export class Task {
       const response = await fetch(`${this.todo.baseUrl}/${this.data.id}`, {
         method: 'PATCH',
         headers: {
+          Authorization: this.todo.authorization,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ id: this.data.id, isCompleted: !this.data.isCompleted }),
@@ -67,6 +68,7 @@ export class Task {
       const response = await fetch(`${this.todo.baseUrl}/${this.data.id}`, {
         method: 'DELETE',
         headers: {
+          Authorization: this.todo.authorization,
           'Content-Type': 'application/json',
         },
       });

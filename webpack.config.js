@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const outputPath = path.resolve(__dirname, 'docs');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/index.ts',
@@ -36,6 +37,7 @@ module.exports = {
       template: './src/index.html',
       filename: 'index.html',
     }),
+    new Dotenv(),
   ],
   resolve: {
     extensions: ['.ts', '.js'],
