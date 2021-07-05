@@ -5,7 +5,6 @@ export class Task {
   component: HTMLElement;
   data: TaskData;
   hp: number;
-  sending = false;
 
   constructor(data: TaskData, todo: Todo) {
     this.data = data;
@@ -24,14 +23,14 @@ export class Task {
   };
 
   #changeCompleted = async (e: MouseEvent): Promise<void> => {
-    if (this.sending) return;
+    if (this.todo.sending) return;
     if (!this.data.isCompleted && this.hp > 0) {
       this.hp--;
       this.#attackMessage(e);
       return;
     }
 
-    this.sending = true;
+    this.todo.sending = true;
     if (!this.data.isCompleted) this.#deadMessage(e);
     try {
       const response = await fetch(`${this.todo.baseUrl}/${this.data.id}`, {
@@ -46,6 +45,7 @@ export class Task {
       this.data.isCompleted = data.isCompleted;
 
       if (data.isCompleted) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         this.todo.elements.complete.prepend(this.component);
       } else {
         this.todo.elements.incomplete.appendChild(this.component);
@@ -54,14 +54,14 @@ export class Task {
     } catch (e) {
       alert(e.message);
     } finally {
-      this.sending = false;
+      this.todo.sending = false;
     }
   };
 
   #delete = async (): Promise<void> => {
-    if (this.sending) return;
+    if (this.todo.sending) return;
 
-    this.sending = true;
+    this.todo.sending = true;
     try {
       this.component.style.opacity = '0';
       const response = await fetch(`${this.todo.baseUrl}/${this.data.id}`, {
@@ -77,7 +77,7 @@ export class Task {
       alert(e.message);
       this.component.style.opacity = '1';
     } finally {
-      this.sending = false;
+      this.todo.sending = false;
     }
   };
 
@@ -130,6 +130,6 @@ export class Task {
     taskBody.appendChild(message);
     setTimeout(() => {
       taskBody.removeChild(message);
-    }, 1000);
+    }, 1500);
   };
 }

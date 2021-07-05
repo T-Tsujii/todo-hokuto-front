@@ -5,7 +5,7 @@ export class Todo {
   tasks: Task[] = [];
   elements: TodoElements;
   alert: NodeJS.Timeout | undefined;
-  baseUrl = 'https://todo-hokuto-api.herokuapp.com/tasks';
+  baseUrl = 'https://todo-api.next-comfort.com/tasks';
   sending = false;
 
   constructor(component: HTMLElement) {
